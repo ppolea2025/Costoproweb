@@ -1,0 +1,1 @@
+Utilice esta herramienta para costear sus productos y servicios bajo su propia responsabilidad, este producto esta elaborado con la intención de ayudarle en el calculo del costo de venta de sus productos y servicios pero el mismo puede contener errores u omisiones, vigile bien los datos que ingresa y apóyese en esta herramienta para agilizar su proceso de calculo.

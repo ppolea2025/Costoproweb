@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Costea tus productos y servicios gratis. Calcula precio de venta, IVA, retenciones y margen de utilidad con la calculadora más completa para PyMEs en México.">
+<meta name="keywords" content="costeo productos, calculadora precio venta, IVA México, margen utilidad, costeo servicios, PyMEs México">
+<meta property="og:title" content="CostoPro — Calculadora de Costeo Gratuita para México">
+<meta property="og:description" content="Calcula el precio correcto de tus productos y servicios. IVA, retenciones, utilidad y más. Recibe tu reporte por correo, gratis.">
+<title>CostoPro — Costeo Profesional Gratis para México</title>
+
+<!-- ══════════════════════════════════════════════════════
+     EMAILJS — Configuración requerida
+     1. Crea cuenta en https://emailjs.com (plan Free)
+     2. Conecta tu cuenta de Gmail como "Email Service"
+     3. Crea un Email Template con estas variables:
+          {{to_name}}     → nombre del contacto
+          {{to_email}}    → correo del destinatario
+          {{product_name}}→ nombre del producto costeado
+          {{report_body}} → reporte completo en texto
+          {{regime}}      → tipo + persona
+          {{precio_cliente}} → precio final
+          {{neto}}        → flujo neto
+     4. Reemplaza los tres valores de abajo:
+══════════════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  const EMAILJS_PUBLIC_KEY  = 'XkjiPytphIm5whs4w';   // ← Account > General
+  const EMAILJS_SERVICE_ID  = 'service_7oank9s';   // ← Email Services
+  const EMAILJS_TEMPLATE_ID = 'template_wgjfsci';  // ← Email Templates
+  (function(){ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); })();
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #1A2332; --navy2: #243044;
+  --amber: #E8A020; --amber-l: #F5BC4A; --amber-bg: #FEF3DC;
+  --bg: #F0F2F5; --surface: #FFF;
+  --border: #E2E6ED; --border-d: #C8CDD8;
+  --text: #1A2332; --text2: #4B5563; --text3: #9CA3AF;
+  --red: #DC2626; --red-bg: #FEF2F2;
+  --green: #059669; --green-bg: #ECFDF5;
+  --blue: #2563EB; --blue-bg: #EFF6FF;
+  --r: 10px; --rs: 6px;
+  --sh: 0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shm: 0 4px 16px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.06);
+}
+
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); font-size:14px; line-height:1.5; }
+
+a { color:var(--blue); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* ── TOP BAR ── */
+.top-bar { background:var(--navy); color:rgba(255,255,255,.6); font-size:12px; text-align:center; padding:6px 16px; }
+.top-bar strong { color:var(--amber); }
+
+/* ── HEADER ── */
+.site-header { background:var(--navy); padding:0 24px; box-shadow:0 2px 8px rgba(0,0,0,.3); position:sticky; top:0; z-index:100; }
+.site-header-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:16px; height:58px; }
+.logo { font-size:22px; font-weight:800; letter-spacing:-.5px; color:#fff; white-space:nowrap; }
+.logo span { color:var(--amber); }
+.logo-tag { font-size:11px; font-weight:400; color:rgba(255,255,255,.45); margin-left:4px; }
+.header-spacer { flex:1; }
+.badge-free { background:var(--green); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.04em; }
+
+/* ── AD BANNER TOP ── */
+.ad-leaderboard {
+  background:var(--surface); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  min-height:90px; padding:8px;
+}
+.ad-placeholder {
+  background:#F8F9FA; border:1px dashed var(--border-d);
+  border-radius:var(--rs); display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  color:var(--text3); font-size:11px; gap:4px;
+}
+.ad-placeholder span { font-size:10px; }
+
+/* ── HERO ── */
+.hero { max-width:1200px; margin:0 auto; padding:28px 24px 0; }
+.hero-title { font-size:26px; font-weight:800; color:var(--navy); line-height:1.25; margin-bottom:8px; }
+.hero-title em { color:var(--amber); font-style:normal; }
+.hero-sub { font-size:15px; color:var(--text2); max-width:620px; line-height:1.6; margin-bottom:0; }
+.hero-pills { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.pill { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:4px 12px; font-size:12px; color:var(--text2); }
+.pill.green { background:var(--green-bg); border-color:#A7F3D0; color:var(--green); font-weight:600; }
+
+/* ── MAIN GRID ── */
+.main-wrap { max-width:1200px; margin:0 auto; padding:20px 24px 40px; display:grid; grid-template-columns:1fr 320px; gap:20px; align-items:start; }
+
+/* ── TOOL AREA ── */
+.tool-area { display:flex; flex-direction:column; gap:16px; }
+
+/* ── CARDS ── */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r); box-shadow:var(--sh); overflow:hidden; }
+.card-header { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-bottom:1px solid var(--border); background:#FAFBFD; }
+.card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text2); }
+
+/* ── MODO CARD ── */
+.modo-card { background:var(--navy); border-radius:var(--r); padding:14px 18px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+.modo-group { display:flex; flex-direction:column; gap:5px; }
+.modo-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:rgba(255,255,255,.4); }
+.modo-btns { display:flex; border-radius:var(--rs); overflow:hidden; border:1px solid rgba(255,255,255,.2); }
+.modo-btn { padding:6px 14px; font-size:12px; font-weight:500; border:none; cursor:pointer; background:transparent; color:rgba(255,255,255,.6); transition:all .15s; }
+.modo-btn:hover:not(.active) { background:rgba(255,255,255,.08); color:rgba(255,255,255,.85); }
+.modo-btn.active { background:var(--amber); color:var(--navy); font-weight:700; }
+.modo-btn + .modo-btn { border-left:1px solid rgba(255,255,255,.15); }
+.modo-div { width:1px; background:rgba(255,255,255,.12); align-self:stretch; }
+.regime-pill { flex:1; min-width:160px; background:rgba(255,255,255,.07); border-left:3px solid var(--amber); border-radius:var(--rs); padding:8px 12px; }
+.regime-pill-title { font-size:12px; font-weight:600; color:rgba(255,255,255,.9); }
+.regime-pill-desc { font-size:11px; color:rgba(255,255,255,.45); margin-top:2px; line-height:1.4; }
+
+/* ── ROWS ── */
+.concepto-row { display:grid; grid-template-columns:auto 1fr auto auto; align-items:center; gap:10px; padding:11px 18px; border-bottom:1px solid var(--border); }
+.concepto-row:last-child { border-bottom:none; }
+.concepto-row.disabled { opacity:.45; }
+.concepto-label { font-size:14px; font-weight:500; }
+.concepto-label small { display:block; font-size:11px; font-weight:400; color:var(--text3); }
+.concepto-inputs { display:flex; align-items:center; gap:6px; justify-content:flex-end; }
+
+/* Toggle */
+.toggle { position:relative; width:34px; height:19px; cursor:pointer; flex-shrink:0; }
+.toggle input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-track { position:absolute; inset:0; background:#D1D5DB; border-radius:10px; transition:background .2s; }
+.toggle input:checked ~ .toggle-track { background:var(--navy); }
+.toggle-thumb { position:absolute; top:3px; left:3px; width:13px; height:13px; background:#fff; border-radius:50%; transition:transform .2s; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.toggle input:checked ~ .toggle-thumb { transform:translateX(15px); }
+
+.input-num { width:88px; padding:6px 10px; border:1px solid var(--border-d); border-radius:var(--rs); font-size:14px; font-variant-numeric:tabular-nums; text-align:right; outline:none; transition:border-color .15s; background:var(--surface); }
+.input-num:focus { border-color:var(--amber); box-shadow:0 0 0 3px rgba(232,160,32,.12); }
+.input-num:disabled { background:var(--bg); color:var(--text3); }
+.input-select { padding:6px 8px; border:1px solid var(--border-d); border-radius:var(--rs); font-size:12px; outline:none; background:var(--surface); color:var(--text); }
+.unit-label { font-size:12px; color:var(--text3); min-width:18px; }
+
+.bk-tag { display:inline-block; font-size:10px; font-weight:600; letter-spacing:.04em; padding:2px 7px; border-radius:20px; text-transform:uppercase; }
+.bk-tag.costo { background:var(--red-bg); color:var(--red); }
+.bk-tag.utilidad { background:var(--green-bg); color:var(--green); }
+.bk-tag.ret { background:var(--amber-bg); color:#92400E; }
+.bk-tag.iva { background:var(--blue-bg); color:var(--blue); }
+
+.sep-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text3); padding:8px 18px 4px; border-top:1px solid var(--border); }
+
+.iva-opts { display:flex; gap:5px; }
+.iva-btn { padding:5px 11px; border-radius:var(--rs); border:1px solid var(--border-d); background:transparent; color:var(--text2); font-size:12px; font-weight:500; cursor:pointer; transition:all .15s; }
+.iva-btn.active { background:var(--navy); color:#fff; border-color:var(--navy); }
+
+.custom-nombre-inp { padding:5px 10px; border:1px solid var(--border-d); border-radius:var(--rs); font-size:13px; outline:none; }
+.custom-nombre-inp:focus { border-color:var(--amber); }
+
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:var(--rs); font-size:13px; font-weight:500; cursor:pointer; border:none; transition:all .15s; white-space:nowrap; }
+.btn-amber { background:var(--amber); color:var(--navy); }
+.btn-amber:hover { background:var(--amber-l); }
+.btn-outline { background:transparent; color:var(--text2); border:1px solid var(--border-d); }
+.btn-outline:hover { background:var(--bg); }
+.btn-ghost { background:rgba(255,255,255,.08); color:rgba(255,255,255,.85); border:1px solid rgba(255,255,255,.15); }
+.btn-ghost:hover { background:rgba(255,255,255,.15); }
+.btn-danger { background:var(--red-bg); color:var(--red); border:1px solid #FECACA; }
+.btn-sm { padding:4px 10px; font-size:12px; }
+.btn-lg { padding:12px 24px; font-size:15px; font-weight:700; border-radius:var(--r); }
+
+/* ── BREAKDOWN (resultado) ── */
+.breakdown { position:sticky; top:72px; }
+.bk-section { padding:12px 16px; }
+.bk-section + .bk-section { border-top:1px solid var(--border); }
+.bk-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text3); margin-bottom:8px; }
+.bk-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding:3px 0; font-size:13px; }
+.bk-label { color:var(--text2); flex:1; }
+.bk-value { font-variant-numeric:tabular-nums; font-weight:500; min-width:85px; text-align:right; }
+.bk-divider { height:1px; background:var(--border); margin:6px 0; }
+.bk-total-row { display:flex; align-items:center; justify-content:space-between; padding:6px 0 3px; }
+.bk-total-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text2); }
+.bk-total-val { font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; }
+
+.bk-precio { padding:14px 16px; background:var(--navy); color:#fff; }
+.bk-precio .bk-total-label { color:rgba(255,255,255,.55); }
+.bk-precio .bk-total-val { font-size:24px; color:var(--amber); }
+.bk-precio .bk-sub { font-size:11px; color:rgba(255,255,255,.35); margin-top:2px; }
+
+.bk-neto { padding:12px 16px; background:var(--green-bg); }
+.bk-neto .bk-total-label { color:var(--green); }
+.bk-neto .bk-total-val { color:var(--green); font-size:18px; }
+
+.metrics-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+.metric-cell { padding:12px 14px; background:var(--surface); }
+.metric-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+.metric-val { font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; }
+.metric-sub { font-size:10px; color:var(--text3); margin-top:1px; }
+
+/* ── SIDEBAR ── */
+.sidebar { display:flex; flex-direction:column; gap:16px; position:sticky; top:72px; }
+
+.ad-rect { min-height:250px; width:100%; }
+
+/* Product banners */
+.promo-card { background:var(--navy); border-radius:var(--r); overflow:hidden; color:#fff; }
+.promo-card-header { padding:12px 14px; border-bottom:1px solid rgba(255,255,255,.1); }
+.promo-card-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:rgba(255,255,255,.4); margin-bottom:2px; }
+.promo-card-title { font-size:13px; font-weight:700; }
+.promo-item { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.07); cursor:pointer; transition:background .15s; }
+.promo-item:hover { background:rgba(255,255,255,.05); }
+.promo-item:last-child { border-bottom:none; }
+.promo-icon { width:32px; height:32px; border-radius:var(--rs); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; flex-shrink:0; }
+.promo-body { flex:1; }
+.promo-name { font-size:13px; font-weight:600; }
+.promo-desc { font-size:11px; color:rgba(255,255,255,.45); line-height:1.3; margin-top:1px; }
+.promo-badge { font-size:10px; font-weight:600; padding:2px 7px; border-radius:20px; }
+
+/* ── CTA REPORTE (pulsing when ready) ── */
+.reporte-cta-wrap { padding:14px 16px; border-top:1px solid var(--border); }
+.btn-reporte { width:100%; justify-content:center; padding:12px; font-size:14px; position:relative; overflow:hidden; }
+.btn-reporte::after { content:''; position:absolute; inset:0; background:rgba(255,255,255,.15); opacity:0; }
+.btn-reporte.pulse { animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(232,160,32,.4)} 50%{box-shadow:0 0 0 8px rgba(232,160,32,0)} }
+.reporte-hint { font-size:11px; color:var(--text3); text-align:center; margin-top:6px; }
+
+/* ── CUSTOM LIST ── */
+.custom-item { display:grid; grid-template-columns:auto 1fr auto auto auto auto; align-items:center; gap:7px; padding:9px 18px; border-bottom:1px solid var(--border); }
+.custom-item:last-child { border-bottom:none; }
+.empty-custom { padding:16px 18px; text-align:center; color:var(--text3); font-size:13px; }
+
+/* ── MODALS ── */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+.overlay.open { display:flex; }
+.modal { background:var(--surface); border-radius:var(--r); box-shadow:var(--shm); width:100%; display:flex; flex-direction:column; animation:modalIn .2s ease; max-height:90vh; }
+@keyframes modalIn { from{opacity:0;transform:scale(.95) translateY(-8px)} to{opacity:1;transform:none} }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.modal-title { font-size:16px; font-weight:700; }
+.modal-body { padding:20px; overflow-y:auto; flex:1; }
+.modal-footer { padding:12px 20px; border-top:1px solid var(--border); display:flex; gap:8px; justify-content:flex-end; flex-shrink:0; }
+
+/* ── CAPTURE MODAL ── */
+.capture-modal { max-width:420px; }
+.capture-icon { font-size:36px; text-align:center; margin-bottom:12px; }
+.capture-title { font-size:18px; font-weight:800; text-align:center; margin-bottom:6px; }
+.capture-sub { font-size:13px; color:var(--text2); text-align:center; line-height:1.6; margin-bottom:20px; }
+.capture-preview { background:var(--bg); border-radius:var(--rs); padding:12px 14px; margin-bottom:20px; font-size:12px; }
+.capture-preview-row { display:flex; justify-content:space-between; padding:3px 0; }
+.capture-preview-row strong { font-variant-numeric:tabular-nums; }
+.form-group { margin-bottom:14px; }
+.form-label { font-size:12px; font-weight:600; color:var(--text2); display:block; margin-bottom:5px; }
+.form-input { width:100%; padding:10px 14px; border:1px solid var(--border-d); border-radius:var(--rs); font-size:14px; outline:none; transition:border-color .15s; }
+.form-input:focus { border-color:var(--amber); box-shadow:0 0 0 3px rgba(232,160,32,.12); }
+.form-note { font-size:11px; color:var(--text3); margin-top:14px; text-align:center; line-height:1.5; }
+
+/* Success state */
+.success-state { text-align:center; padding:10px 0; }
+.success-icon { font-size:48px; margin-bottom:12px; }
+.success-title { font-size:18px; font-weight:800; color:var(--green); margin-bottom:8px; }
+.success-sub { font-size:14px; color:var(--text2); line-height:1.6; }
+
+/* Spinner */
+.spinner { width:20px; height:20px; border:2px solid rgba(26,35,50,.2); border-top-color:var(--navy); border-radius:50%; animation:spin .7s linear infinite; display:inline-block; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── CONCEPTO MODAL ── */
+.concepto-modal { max-width:440px; }
+
+/* ── FOOTER ── */
+.site-footer { background:var(--navy); color:rgba(255,255,255,.45); text-align:center; padding:24px; font-size:12px; margin-top:20px; }
+.site-footer a { color:rgba(255,255,255,.6); }
+
+/* Hint tooltip */
+.hint { display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:var(--bg); border:1px solid var(--border-d); color:var(--text3); font-size:9px; font-weight:700; cursor:default; margin-left:3px; position:relative; flex-shrink:0; }
+.hint:hover::after { content:attr(data-tip); position:absolute; left:50%; bottom:20px; transform:translateX(-50%); background:var(--navy); color:#fff; font-size:11px; font-weight:400; padding:5px 10px; border-radius:6px; white-space:nowrap; width:max-content; max-width:210px; pointer-events:none; z-index:50; }
+.hint:hover::before { content:''; position:absolute; left:50%; bottom:16px; transform:translateX(-50%); border:4px solid transparent; border-top-color:var(--navy); pointer-events:none; z-index:50; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .main-wrap { grid-template-columns:1fr; }
+  .sidebar { position:static; }
+  .breakdown { position:static; }
+  .hero-title { font-size:20px; }
+}
+
+/* ── ANIMATE NUMBERS ── */
+.bk-value,.metric-val,.bk-total-val { transition:color .2s; }
+.flash { animation:numFlash .25s ease; }
+@keyframes numFlash { 0%{opacity:1} 40%{opacity:.4} 100%{opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  Herramienta <strong>100% gratuita</strong> para PyMEs en México — Sin registro, sin suscripción
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="logo">Costo<span>Pro</span><span class="logo-tag">México</span></div>
+    <div class="header-spacer"></div>
+    <span class="badge-free">GRATIS</span>
+  </div>
+</header>
+
+<!-- AD BANNER TOP (728×90 Leaderboard) -->
+<div class="ad-leaderboard">
+  <!-- REEMPLAZAR CON CÓDIGO DE GOOGLE ADSENSE -->
+  <div class="ad-placeholder" style="width:728px;max-width:100%;height:74px">
+    <span>Publicidad</span><span>728 × 90</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1 class="hero-title">Calcula el precio <em>correcto</em> de tus productos y servicios</h1>
+  <p class="hero-sub">La calculadora de costeo más completa para México. IVA, retenciones, utilidad, comisiones y más — recibe tu reporte detallado gratis en tu correo.</p>
+  <div class="hero-pills">
+    <span class="pill green">✓ Gratis, sin registro</span>
+    <span class="pill">IVA 16% / Exento</span>
+    <span class="pill">Personas Físicas y Morales</span>
+    <span class="pill">Retención ISR y IVA</span>
+    <span class="pill">Reporte por correo</span>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-wrap">
+
+  <!-- ═══ TOOL AREA ═══ -->
+  <div class="tool-area">
+
+    <!-- MODO -->
+    <div class="modo-card">
+      <div class="modo-group">
+        <span class="modo-label">Tipo de operación</span>
+        <div class="modo-btns">
+          <button class="modo-btn" id="modo-producto" onclick="setTipo('producto')">Producto</button>
+          <button class="modo-btn active" id="modo-servicio" onclick="setTipo('servicio')">Servicio</button>
+        </div>
+      </div>
+      <div class="modo-div"></div>
+      <div class="modo-group">
+        <span class="modo-label">Régimen del proveedor</span>
+        <div class="modo-btns">
+          <button class="modo-btn" id="modo-moral" onclick="setPersona('moral')">Persona Moral</button>
+          <button class="modo-btn active" id="modo-fisica" onclick="setPersona('fisica')">Persona Física</button>
+        </div>
+      </div>
+      <div class="modo-div"></div>
+      <div class="regime-pill">
+        <div class="regime-pill-title" id="regime-title">Servicio · Persona Física</div>
+        <div class="regime-pill-desc" id="regime-desc">Retención IVA y ISR aplicadas automáticamente.</div>
+      </div>
+    </div>
+
+    <!-- DATOS DEL CONCEPTO -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">¿Qué estás costeando?</span>
+      </div>
+      <div style="padding:14px 18px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px">Nombre del producto o servicio</label>
+          <input class="form-input" type="text" id="nombre" placeholder="Ej: Consultoría de marketing, Producto X..." oninput="render()">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px">Unidad</label>
+          <input class="form-input" style="width:110px" type="text" id="unidad" placeholder="pieza, hr..." oninput="render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- COSTO BASE -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Costo base</span>
+        <span style="font-size:11px;color:var(--text3)" id="label-costo-header">Costo directo de producción o adquisición</span>
+      </div>
+      <div class="concepto-row" style="grid-template-columns:1fr auto auto">
+        <span class="concepto-label">
+          <span id="label-costo">Costo directo</span>
+          <small id="label-costo-sub">Materia prima, mano de obra, compra de producto...</small>
+        </span>
+        <span style="font-size:13px;color:var(--text3)">$</span>
+        <input class="input-num" style="width:130px" type="number" id="costoBase" value="0" min="0" step="0.01" oninput="render()">
+      </div>
+    </div>
+
+    <!-- ESTRUCTURA -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Estructura de precio</span></div>
+
+      <div class="concepto-row" id="row-gi">
+        <label class="toggle"><input type="checkbox" id="gi-on" checked onchange="toggleRow('gi')"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <span class="concepto-label"><span id="lbl-gi">Gastos indirectos / Overhead</span><small id="lbl-gi-sub">Renta, servicios, nómina proporcional...</small></span>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="gi-val" value="25" min="0" max="999" step="0.1" oninput="render()">
+          <span class="unit-label">%</span>
+          <span class="bk-tag costo" id="gi-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="Porcentaje sobre el costo base">?</span>
+      </div>
+
+      <div class="concepto-row" id="row-ut">
+        <label class="toggle"><input type="checkbox" id="ut-on" checked onchange="toggleRow('ut')"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <span class="concepto-label">Margen de utilidad<small>Porcentaje sobre costo total (base + gastos)</small></span>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="ut-val" value="30" min="0" max="999" step="0.1" oninput="render()">
+          <span class="unit-label">%</span>
+          <span class="bk-tag utilidad" id="ut-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="Porcentaje sobre costo total (base + gastos indirectos)">?</span>
+      </div>
+
+      <div class="concepto-row" id="row-cv">
+        <label class="toggle"><input type="checkbox" id="cv-on" onchange="toggleRow('cv')"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <span class="concepto-label">Comisión de vendedor / agente<small>Sobre precio antes de comisiones</small></span>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="cv-val" value="5" min="0" max="100" step="0.1" oninput="render()" disabled>
+          <span class="unit-label">%</span>
+          <span class="bk-tag costo" id="cv-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="% sobre precio antes de comisiones">?</span>
+      </div>
+
+      <div class="concepto-row" id="row-cp">
+        <label class="toggle"><input type="checkbox" id="cp-on" onchange="toggleRow('cp')"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span class="concepto-label">Comisión plataforma / banco</span>
+          <input class="custom-nombre-inp" type="text" id="cp-nombre" placeholder="Stripe, Clip, Mercado Pago..." style="width:190px" oninput="render()" disabled>
+        </div>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="cp-val" value="3.6" min="0" max="100" step="0.01" oninput="render()" disabled>
+          <span class="unit-label">%</span>
+          <span class="bk-tag costo" id="cp-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="% sobre precio antes de comisiones">?</span>
+      </div>
+    </div>
+
+    <!-- CONCEPTOS PERSONALIZADOS -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Conceptos adicionales</span>
+        <button class="btn btn-outline btn-sm" onclick="openConceptoModal()">+ Agregar</button>
+      </div>
+      <div id="custom-list">
+        <div class="empty-custom" id="empty-custom">Flete, seguro, IEPS, maniobras... agrégalos aquí.</div>
+      </div>
+    </div>
+
+    <!-- IMPUESTOS -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Impuestos y retenciones</span>
+        <span style="font-size:11px;color:var(--text3)">Régimen fiscal México</span>
+      </div>
+
+      <div class="concepto-row" style="grid-template-columns:auto 1fr auto">
+        <span class="concepto-label">IVA traslado<small>Se suma al precio que paga el cliente</small></span>
+        <div></div>
+        <div class="iva-opts">
+          <button class="iva-btn active" id="iva-16" onclick="setIVA('16')">16%</button>
+          <button class="iva-btn" id="iva-0" onclick="setIVA('0')">0%</button>
+          <button class="iva-btn" id="iva-ex" onclick="setIVA('ex')">Exento</button>
+        </div>
+      </div>
+
+      <div class="sep-label">Retenciones (el cliente descuenta al pagarte)</div>
+
+      <div class="concepto-row" id="row-riv">
+        <label class="toggle"><input type="checkbox" id="riv-on" onchange="render()"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <span class="concepto-label">Retención de IVA (10.67%)<small>2/3 del IVA — cliente persona moral, proveedor persona física</small></span>
+        <div class="concepto-inputs"><span class="bk-tag ret" id="riv-monto">$0</span></div>
+        <span class="hint" data-tip="El cliente retiene 2/3 del IVA trasladado. Aplica cuando tú eres persona física y tu cliente es persona moral.">?</span>
+      </div>
+
+      <div class="concepto-row" id="row-risr">
+        <label class="toggle"><input type="checkbox" id="risr-on" onchange="render()"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <span class="concepto-label">Retención ISR<small>Honorarios persona física — sobre precio sin IVA</small></span>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="risr-val" value="10" min="0" max="100" step="0.1" oninput="render()" style="width:68px">
+          <span class="unit-label">%</span>
+          <span class="bk-tag ret" id="risr-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="El cliente retiene este % sobre el precio sin IVA. Aplica para honorarios de personas físicas.">?</span>
+      </div>
+
+      <div class="concepto-row" id="row-rp">
+        <label class="toggle"><input type="checkbox" id="rp-on" onchange="toggleRow('rp')"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span class="concepto-label">Otra retención</span>
+          <input class="custom-nombre-inp" type="text" id="rp-nombre" placeholder="Nombre..." style="width:160px" oninput="render()" disabled>
+        </div>
+        <div class="concepto-inputs">
+          <input class="input-num" type="number" id="rp-val" value="0" min="0" max="100" step="0.1" oninput="render()" disabled style="width:68px">
+          <span class="unit-label">%</span>
+          <span class="bk-tag ret" id="rp-monto">$0</span>
+        </div>
+        <span class="hint" data-tip="% sobre el precio sin IVA">?</span>
+      </div>
+    </div>
+
+  </div><!-- /tool-area -->
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <div class="sidebar">
+
+    <!-- BREAKDOWN -->
+    <div class="card breakdown">
+      <div class="bk-precio">
+        <div class="bk-total-row">
+          <span class="bk-total-label">Precio al cliente</span>
+          <span class="bk-total-val" id="bk-precio-cliente">$0.00</span>
+        </div>
+        <div class="bk-sub" id="bk-producto-sub">—</div>
+      </div>
+
+      <div class="bk-section">
+        <div class="bk-section-title">Desglose</div>
+        <div class="bk-row"><span class="bk-label">Costo base</span><span class="bk-value" id="bk-cb">$0.00</span></div>
+        <div class="bk-row" id="bkr-gi" style="display:none"><span class="bk-label">+ G. indirectos (<span id="bk-gi-p">0</span>%)</span><span class="bk-value" id="bk-gi">$0.00</span></div>
+        <div class="bk-divider"></div>
+        <div class="bk-row"><span class="bk-label" style="font-weight:600">Costo total</span><span class="bk-value" id="bk-ctotal">$0.00</span></div>
+        <div class="bk-row" id="bkr-ut" style="display:none"><span class="bk-label">+ Utilidad (<span id="bk-ut-p">0</span>%)</span><span class="bk-value" style="color:var(--green)" id="bk-ut">$0.00</span></div>
+        <div class="bk-row" id="bkr-cv" style="display:none"><span class="bk-label">+ Comisión vend. (<span id="bk-cv-p">0</span>%)</span><span class="bk-value" id="bk-cv">$0.00</span></div>
+        <div class="bk-row" id="bkr-cp" style="display:none"><span class="bk-label">+ <span id="bk-cp-n">Plataforma</span> (<span id="bk-cp-p">0</span>%)</span><span class="bk-value" id="bk-cp">$0.00</span></div>
+        <div id="bk-custom-rows"></div>
+        <div class="bk-divider"></div>
+        <div class="bk-total-row"><span class="bk-total-label">Sin IVA</span><span class="bk-total-val" style="font-size:15px" id="bk-sin-iva">$0.00</span></div>
+        <div class="bk-row" id="bkr-iva"><span class="bk-label">+ IVA (<span id="bk-iva-p">16</span>%)</span><span class="bk-value" style="color:var(--blue)" id="bk-iva">$0.00</span></div>
+      </div>
+
+      <div class="bk-section" id="bkr-ret-section" style="display:none">
+        <div class="bk-section-title">Retenciones del cliente</div>
+        <div class="bk-row" id="bkr-riv" style="display:none"><span class="bk-label">— Ret. IVA 10.67%</span><span class="bk-value" style="color:#92400E" id="bk-riv">$0.00</span></div>
+        <div class="bk-row" id="bkr-risr" style="display:none"><span class="bk-label">— Ret. ISR (<span id="bk-risr-p">10</span>%)</span><span class="bk-value" style="color:#92400E" id="bk-risr">$0.00</span></div>
+        <div class="bk-row" id="bkr-rp" style="display:none"><span class="bk-label">— <span id="bk-rp-n">Ret.</span> (<span id="bk-rp-p">0</span>%)</span><span class="bk-value" style="color:#92400E" id="bk-rp">$0.00</span></div>
+      </div>
+
+      <div class="bk-neto">
+        <div class="bk-total-row">
+          <span class="bk-total-label">Neto que recibes</span>
+          <span class="bk-total-val" id="bk-neto">$0.00</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-cell"><div class="metric-label">Margen</div><div class="metric-val green" id="met-margen">0.0%</div></div>
+        <div class="metric-cell"><div class="metric-label">Utilidad $</div><div class="metric-val amber" id="met-util">$0</div></div>
+        <div class="metric-cell"><div class="metric-label">ROI</div><div class="metric-val" style="color:var(--blue)" id="met-roi">0.0%</div></div>
+        <div class="metric-cell"><div class="metric-label">Precio mín.</div><div class="metric-val" style="color:var(--text2);font-size:14px" id="met-pe">$0.00</div></div>
+      </div>
+
+      <!-- ANÁLISIS DE DESCUENTOS -->
+      <div style="border-top:2px solid var(--amber)">
+        <div style="padding:10px 14px 6px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2)">Margen de descuentos</span>
+          <span class="hint" data-tip="Muestra hasta qué % puedes descontar sin perder utilidad. Rojo = pierdes ganancia.">?</span>
+        </div>
+
+        <!-- Resumen: precio lista vs costo -->
+        <div style="padding:0 14px 10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:#F8F9FA;border-radius:6px;padding:8px 10px;border-left:3px solid var(--navy)">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px">Costo total</div>
+            <div style="font-size:14px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums" id="ds-costo-total">$0.00</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:1px">Sin margen de ganancia</div>
+          </div>
+          <div style="background:var(--green-bg);border-radius:6px;padding:8px 10px;border-left:3px solid var(--green)">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--green);margin-bottom:2px">Utilidad base</div>
+            <div style="font-size:14px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums" id="ds-utilidad-base">$0.00</div>
+            <div style="font-size:9px;color:var(--green);margin-top:1px;opacity:.7" id="ds-utilidad-pct">0.0% sobre precio</div>
+          </div>
+        </div>
+
+        <!-- Alerta descuento máximo -->
+        <div style="margin:0 14px 10px;padding:8px 12px;border-radius:7px;display:flex;align-items:center;gap:8px" id="ds-alerta">
+          <span style="font-size:16px" id="ds-alerta-ico">—</span>
+          <div>
+            <div style="font-size:11px;font-weight:700" id="ds-alerta-titulo">Sin calcular</div>
+            <div style="font-size:10px;margin-top:1px;opacity:.8" id="ds-alerta-sub">Ingresa costo base para ver el análisis</div>
+          </div>
+        </div>
+
+        <!-- Tabla de descuentos -->
+        <div style="padding:0 14px 10px">
+          <table style="width:100%;border-collapse:collapse;font-size:11px" id="ds-tabla">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border)">
+                <th style="text-align:left;padding:4px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3)">Descuento</th>
+                <th style="text-align:right;padding:4px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3)">Precio</th>
+                <th style="text-align:right;padding:4px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3)">Utilidad</th>
+                <th style="text-align:center;padding:4px 6px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3)">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="ds-tabla-body">
+              <tr><td colspan="4" style="text-align:center;color:var(--text3);padding:12px;font-size:11px">Ingresa un costo base para ver el análisis</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CALCULADORA DE DESCUENTO LIBRE -->
+        <div style="margin:0 14px 14px;border:1px solid var(--border-d);border-radius:8px;overflow:hidden">
+          <div style="background:var(--navy);padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.7)">Calcular descuento exacto</span>
+            <span style="font-size:10px;color:rgba(255,255,255,.35)">Cualquier porcentaje</span>
+          </div>
+          <div style="padding:10px 12px;background:#FAFBFD">
+            <!-- Input de descuento libre -->
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <span style="font-size:12px;color:var(--text2);white-space:nowrap">Descuento:</span>
+              <input type="number" id="ds-libre-pct" min="0" max="100" step="0.01" placeholder="Ej: 10.30"
+                style="width:90px;padding:6px 10px;border:1px solid var(--border-d);border-radius:6px;font-size:14px;font-weight:600;text-align:right;outline:none;transition:border-color .15s"
+                oninput="calcularDescuentoLibre()" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border-d)'">
+              <span style="font-size:14px;font-weight:600;color:var(--text2)">%</span>
+              <button onclick="agregarNivelDescuento()" style="margin-left:auto;padding:5px 10px;border-radius:6px;border:1px solid var(--amber);background:var(--amber-bg);color:#92400E;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">+ Guardar nivel</button>
+            </div>
+            <!-- Resultado en tiempo real -->
+            <div id="ds-libre-resultado" style="display:none;background:var(--surface);border-radius:6px;border:1px solid var(--border);padding:10px 12px">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+                <div>
+                  <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:3px">Precio con descuento</div>
+                  <div style="font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--navy)" id="dsl-precio">$0.00</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:3px">Utilidad real</div>
+                  <div style="font-size:16px;font-weight:800;font-variant-numeric:tabular-nums" id="dsl-util">$0.00</div>
+                </div>
+                <div>
+                  <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:3px">Margen restante</div>
+                  <div style="font-size:16px;font-weight:800;font-variant-numeric:tabular-nums" id="dsl-margen">0.0%</div>
+                </div>
+              </div>
+              <div id="dsl-badge" style="margin-top:8px;padding:5px 10px;border-radius:5px;font-size:11px;font-weight:700;text-align:center"></div>
+            </div>
+          </div>
+          <!-- Niveles guardados -->
+          <div id="ds-niveles-wrap" style="display:none;border-top:1px solid var(--border)">
+            <div style="padding:7px 12px;background:#FAFBFD;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2)">Niveles de descuento guardados</span>
+              <button onclick="limpiarNiveles()" style="font-size:10px;color:var(--red);background:none;border:none;cursor:pointer;font-weight:600">Limpiar todo</button>
+            </div>
+            <div id="ds-niveles-list" style="padding:0 12px 10px;display:flex;flex-direction:column;gap:5px"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA REPORTE -->
+      <div class="reporte-cta-wrap">
+        <button class="btn btn-amber btn-reporte" id="btn-reporte" onclick="abrirCaptura()">
+          Recibir mi reporte gratuito →
+        </button>
+        <div class="reporte-hint" id="reporte-hint">Completa el costeo para activar</div>
+      </div>
+    </div>
+
+    <!-- AD 300×250 -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Publicidad</span></div>
+      <div style="padding:8px;display:flex;justify-content:center">
+        <!-- REEMPLAZAR CON CÓDIGO ADSENSE -->
+        <div class="ad-placeholder ad-rect" style="max-width:300px;height:250px">
+          <span>Google AdSense</span><span>300 × 250</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT BANNERS -->
+    <div class="promo-card">
+      <div class="promo-card-header">
+        <div class="promo-card-label">También te puede interesar</div>
+        <div class="promo-card-title">Herramientas profesionales</div>
+      </div>
+      <div class="promo-item" onclick="scrollToProducto('convertorpro')">
+        <div class="promo-icon" style="background:#243044;color:var(--amber)">CP</div>
+        <div class="promo-body"><div class="promo-name">ConvertorPro</div><div class="promo-desc">Conversión de archivos para notarías y despachos</div></div>
+        <span class="promo-badge" style="background:var(--amber-bg);color:#92400E">Ver →</span>
+      </div>
+      <div class="promo-item" onclick="scrollToProducto('vendepro')">
+        <div class="promo-icon" style="background:#1A3A2A;color:var(--green)">VP</div>
+        <div class="promo-body"><div class="promo-name">VendePro</div><div class="promo-desc">Capacitación en ventas con ebook interactivo</div></div>
+        <span class="promo-badge" style="background:var(--green-bg);color:var(--green)">Ver →</span>
+      </div>
+      <div class="promo-item" onclick="scrollToProducto('qualitypro')">
+        <div class="promo-icon" style="background:#1A2840;color:var(--blue)">QP</div>
+        <div class="promo-body"><div class="promo-name">QualityPro</div><div class="promo-desc">Gestión de calidad ISO 9001:2015 para PyMEs</div></div>
+        <span class="promo-badge" style="background:var(--blue-bg);color:var(--blue)">Ver →</span>
+      </div>
+      <div class="promo-item" onclick="scrollToProducto('formforge')">
+        <div class="promo-icon" style="background:#2D1A40;color:#A78BFA">FF</div>
+        <div class="promo-body"><div class="promo-name">FormForge</div><div class="promo-desc">Generador de formularios HTML con respuestas JSON</div></div>
+        <span class="promo-badge" style="background:#F5F3FF;color:#6D28D9">Ver →</span>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /main-wrap -->
+
+<!-- ═══════════════════════════════════════════════════
+     SECCIÓN: PORTAFOLIO DE HERRAMIENTAS (CARRUSEL)
+════════════════════════════════════════════════════ -->
+<section id="portafolio" style="background:var(--navy);padding:48px 0 56px">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px">
+
+    <div style="text-align:center;margin-bottom:36px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--amber);margin-bottom:8px">Portafolio de herramientas</div>
+      <h2 style="font-size:28px;font-weight:800;color:#fff;margin-bottom:10px">Soluciones profesionales para PyMEs</h2>
+      <p style="font-size:15px;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto;line-height:1.6">Herramientas standalone, sin suscripción, que funcionan desde tu equipo o navegador.</p>
+    </div>
+
+    <!-- CARRUSEL -->
+    <div style="position:relative">
+      <div id="carousel-track" style="overflow:hidden;border-radius:12px">
+        <div id="carousel-inner" style="display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1)">
+
+          <!-- ── SLIDE 1: CostoPro ── -->
+          <div class="slide" style="min-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:12px;overflow:hidden">
+            <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center">
+              <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+                <span style="background:var(--amber-bg);color:#92400E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">Herramienta activa</span>
+              </div>
+              <h3 style="font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px">Costo<span style="color:var(--amber)">Pro</span></h3>
+              <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Calculadora de costeo profesional para productos y servicios. IVA, retenciones, utilidad, comisiones y reporte ejecutivo automático.</p>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+                <li style="font-size:13px;color:var(--text2)">✓ Personas físicas y morales</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Retenciones ISR e IVA automáticas</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Reporte ejecutivo por correo</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Conceptos personalizados ilimitados</li>
+              </ul>
+              <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--amber);color:var(--navy);font-weight:700;font-size:14px;border-radius:8px;text-decoration:none">Usar ahora — gratis →</a>
+            </div>
+            <!-- MOCKUP CostoPro -->
+            <div style="background:#F0F2F5;display:flex;align-items:center;justify-content:center;padding:24px">
+              <div style="width:100%;max-width:340px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;font-family:sans-serif">
+                <div style="background:var(--navy);padding:10px 14px;display:flex;align-items:center;gap:8px">
+                  <span style="font-weight:800;font-size:13px;color:#fff">Costo<span style="color:var(--amber)">Pro</span></span>
+                  <span style="font-size:10px;color:rgba(255,255,255,.4);margin-left:auto">Servicio · P.Física</span>
+                </div>
+                <div style="padding:12px 14px;background:#1A2332;display:flex;gap:8px">
+                  <div style="background:var(--amber);border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--navy)">Servicio</div>
+                  <div style="background:rgba(255,255,255,.1);border-radius:4px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,.5)">Producto</div>
+                  <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+                  <div style="background:var(--amber);border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700;color:var(--navy)">P.Física</div>
+                  <div style="background:rgba(255,255,255,.1);border-radius:4px;padding:5px 10px;font-size:11px;color:rgba(255,255,255,.5)">P.Moral</div>
+                </div>
+                <div style="padding:10px 14px;font-size:11px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0"><span style="color:#666">Costo base</span><span style="font-weight:600">$1,500.00</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0"><span style="color:#666">+ Gastos 25%</span><span>$375.00</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0"><span style="color:#666">+ Utilidad 30%</span><span style="color:var(--green)">$581.25</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0"><span style="color:#666">+ IVA 16%</span><span style="color:var(--blue)">$393.00</span></div>
+                  <div style="background:var(--navy);border-radius:6px;padding:8px 10px;margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+                    <span style="font-size:10px;color:rgba(255,255,255,.6)">Precio cliente</span>
+                    <span style="font-size:15px;font-weight:800;color:var(--amber)">$2,849.25</span>
+                  </div>
+                  <div style="background:#ECFDF5;border-radius:6px;padding:6px 10px;margin-top:6px;display:flex;justify-content:space-between">
+                    <span style="font-size:10px;color:var(--green)">Neto que recibes</span>
+                    <span style="font-size:12px;font-weight:700;color:var(--green)">$2,224.64</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SLIDE 2: ConvertorPro ── -->
+          <div class="slide" style="min-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:12px;overflow:hidden">
+            <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center">
+              <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+                <span style="background:var(--amber-bg);color:#92400E;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">Notarías y legal</span>
+              </div>
+              <h3 style="font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px">Convertor<span style="color:var(--amber)">Pro</span></h3>
+              <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Conversión de archivos 100% local para notarías y despachos. Sin subir nada a la nube, sin riesgos de confidencialidad.</p>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+                <li style="font-size:13px;color:var(--text2)">✓ Word → PDF en un clic</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Extractor masivo XML/CFDI</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Excel → PDF con formato</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Catálogo de directorio</li>
+              </ul>
+              <a href="mailto:contacto@tudominio.com?subject=ConvertorPro" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--navy);color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none">Solicitar demo →</a>
+            </div>
+            <!-- MOCKUP ConvertorPro -->
+            <div id="convertorpro" style="background:#F5F0E8;display:flex;align-items:center;justify-content:center;padding:24px">
+              <div style="width:100%;max-width:340px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;font-family:sans-serif">
+                <div style="background:#1A2332;padding:10px 14px;display:flex;align-items:center;gap:8px">
+                  <span style="font-weight:800;font-size:13px;color:#fff">Convertor<span style="color:var(--amber)">Pro</span></span>
+                  <span style="font-size:10px;color:rgba(255,255,255,.4);margin-left:auto">v4.0 — Local</span>
+                </div>
+                <div style="padding:10px 14px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+                    <div style="background:#FEF3DC;border-radius:6px;padding:8px;text-align:center;border:1.5px solid var(--amber)">
+                      <div style="font-size:16px;margin-bottom:2px">📄</div>
+                      <div style="font-size:10px;font-weight:700;color:#92400E">Word → PDF</div>
+                    </div>
+                    <div style="background:#F8F9FA;border-radius:6px;padding:8px;text-align:center">
+                      <div style="font-size:16px;margin-bottom:2px">📊</div>
+                      <div style="font-size:10px;font-weight:600;color:#666">XML/CFDI</div>
+                    </div>
+                    <div style="background:#F8F9FA;border-radius:6px;padding:8px;text-align:center">
+                      <div style="font-size:16px;margin-bottom:2px">📋</div>
+                      <div style="font-size:10px;font-weight:600;color:#666">Excel → PDF</div>
+                    </div>
+                    <div style="background:#F8F9FA;border-radius:6px;padding:8px;text-align:center">
+                      <div style="font-size:16px;margin-bottom:2px">🗂️</div>
+                      <div style="font-size:10px;font-weight:600;color:#666">Directorio</div>
+                    </div>
+                  </div>
+                  <div style="background:#F0F2F5;border-radius:6px;padding:8px 10px;font-size:11px">
+                    <div style="color:#666;margin-bottom:4px">Arrastra tus archivos aquí</div>
+                    <div style="border:1.5px dashed #C8CDD8;border-radius:4px;padding:10px;text-align:center;color:#9CA3AF;font-size:10px">
+                      .docx, .xlsx, .xml — Sin límite de archivos
+                    </div>
+                  </div>
+                  <div style="margin-top:8px;background:#1A2332;border-radius:6px;padding:7px 10px;text-align:center;font-size:11px;font-weight:700;color:var(--amber)">Convertir ahora</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SLIDE 3: VendePro ── -->
+          <div class="slide" style="min-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:12px;overflow:hidden">
+            <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center">
+              <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+                <span style="background:var(--green-bg);color:var(--green);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">Capacitación en ventas</span>
+              </div>
+              <h3 style="font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px">Vende<span style="color:var(--green)">Pro</span></h3>
+              <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Sistema de capacitación en ventas con ebook interactivo de 6 módulos y herramienta práctica de estrategias y prompts comerciales.</p>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+                <li style="font-size:13px;color:var(--text2)">✓ 6 módulos de formación comercial</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Biblioteca de estrategias</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Wizard de estrategia por situación</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Distribuido en Hotmart</li>
+              </ul>
+              <a href="mailto:contacto@tudominio.com?subject=VendePro" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--green);color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none">Obtener acceso →</a>
+            </div>
+            <!-- MOCKUP VendePro -->
+            <div id="vendepro" style="background:#F0FAF4;display:flex;align-items:center;justify-content:center;padding:24px">
+              <div style="width:100%;max-width:340px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;font-family:sans-serif">
+                <div style="background:#1A3A2A;padding:10px 14px;display:flex;align-items:center">
+                  <span style="font-weight:800;font-size:13px;color:#fff">Vende<span style="color:var(--green)">Pro</span></span>
+                  <span style="font-size:10px;color:rgba(255,255,255,.4);margin-left:auto">6 módulos</span>
+                </div>
+                <div style="padding:10px 14px">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#9CA3AF;margin-bottom:6px">Módulos de formación</div>
+                  <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px">
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--green-bg);border-radius:5px">
+                      <span style="width:16px;height:16px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0">✓</span>
+                      <span style="font-size:11px;font-weight:500;color:var(--green)">Mentalidad del vendedor</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--green-bg);border-radius:5px">
+                      <span style="width:16px;height:16px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0">✓</span>
+                      <span style="font-size:11px;font-weight:500;color:var(--green)">Prospección efectiva</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#F8F9FA;border-radius:5px">
+                      <span style="width:16px;height:16px;background:#D1D5DB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0">3</span>
+                      <span style="font-size:11px;color:#666">Manejo de objeciones</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#F8F9FA;border-radius:5px">
+                      <span style="width:16px;height:16px;background:#D1D5DB;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;flex-shrink:0">4</span>
+                      <span style="font-size:11px;color:#666">Cierre de ventas</span>
+                    </div>
+                  </div>
+                  <div style="background:#1A3A2A;border-radius:6px;padding:7px;display:flex;align-items:center;justify-content:space-between">
+                    <span style="font-size:10px;color:rgba(255,255,255,.6)">Progreso</span>
+                    <div style="flex:1;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:0 8px"><div style="width:33%;height:100%;background:var(--green);border-radius:2px"></div></div>
+                    <span style="font-size:10px;color:var(--green);font-weight:700">33%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SLIDE 4: QualityPro ── -->
+          <div class="slide" style="min-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:12px;overflow:hidden">
+            <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center">
+              <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+                <span style="background:var(--blue-bg);color:var(--blue);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">Calidad ISO 9001</span>
+              </div>
+              <h3 style="font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px">Quality<span style="color:var(--blue)">Pro</span></h3>
+              <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Sistema completo de gestión de calidad ISO 9001:2015 para PyMEs. 15 módulos, mapa de riesgos, KPIs y reportes ejecutivos.</p>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+                <li style="font-size:13px;color:var(--text2)">✓ 15 módulos de gestión</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Mapa de riesgos y KPIs</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Catálogo NOM por sector</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Licencia HMAC por empresa</li>
+              </ul>
+              <a href="mailto:contacto@tudominio.com?subject=QualityPro" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:var(--blue);color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none">Solicitar cotización →</a>
+            </div>
+            <!-- MOCKUP QualityPro -->
+            <div id="qualitypro" style="background:#EFF6FF;display:flex;align-items:center;justify-content:center;padding:24px">
+              <div style="width:100%;max-width:340px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;font-family:sans-serif">
+                <div style="background:#1A2840;padding:10px 14px;display:flex;align-items:center">
+                  <span style="font-weight:800;font-size:13px;color:#fff">Quality<span style="color:#60A5FA">Pro</span></span>
+                  <span style="font-size:10px;color:rgba(255,255,255,.4);margin-left:auto">ISO 9001:2015</span>
+                </div>
+                <div style="padding:10px 14px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px">
+                    <div style="background:var(--blue-bg);border-radius:5px;padding:7px;text-align:center">
+                      <div style="font-size:16px;font-weight:800;color:var(--blue)">87%</div>
+                      <div style="font-size:9px;color:#666">Cumplim.</div>
+                    </div>
+                    <div style="background:#ECFDF5;border-radius:5px;padding:7px;text-align:center">
+                      <div style="font-size:16px;font-weight:800;color:var(--green)">12</div>
+                      <div style="font-size:9px;color:#666">Objetivos</div>
+                    </div>
+                    <div style="background:#FEF2F2;border-radius:5px;padding:7px;text-align:center">
+                      <div style="font-size:16px;font-weight:800;color:var(--red)">3</div>
+                      <div style="font-size:9px;color:#666">Riesgos</div>
+                    </div>
+                  </div>
+                  <div style="font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Riesgo operacional</div>
+                  <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <div style="width:8px;height:8px;border-radius:50%;background:#DC2626;flex-shrink:0"></div>
+                      <span style="font-size:10px;flex:1">Falla en proveedor clave</span>
+                      <span style="font-size:9px;background:#FEF2F2;color:var(--red);padding:1px 5px;border-radius:3px">Alto</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div>
+                      <span style="font-size:10px;flex:1">Rotación de personal</span>
+                      <span style="font-size:9px;background:#FEF3DC;color:#92400E;padding:1px 5px;border-radius:3px">Medio</span>
+                    </div>
+                  </div>
+                  <div style="background:#1A2840;border-radius:6px;padding:7px;text-align:center;font-size:11px;font-weight:700;color:#60A5FA">Ver reporte ejecutivo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── SLIDE 5: FormForge ── -->
+          <div class="slide" style="min-width:100%;display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;border-radius:12px;overflow:hidden">
+            <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center">
+              <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+                <span style="background:#F5F3FF;color:#6D28D9;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em">Captura de datos</span>
+              </div>
+              <h3 style="font-size:26px;font-weight:800;color:var(--navy);margin-bottom:10px">Form<span style="color:#7C3AED">Forge</span></h3>
+              <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:20px">Generador de formularios HTML descargables con respuestas JSON. Crea formularios profesionales sin programar, con evidencia fotográfica y exportación.</p>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:24px">
+                <li style="font-size:13px;color:var(--text2)">✓ 8 plantillas de sistema incluidas</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Captura de evidencia fotográfica</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Exportación JSON y archivo</li>
+                <li style="font-size:13px;color:var(--text2)">✓ Sin servidor — 100% local</li>
+              </ul>
+              <a href="mailto:contacto@tudominio.com?subject=FormForge" style="display:inline-flex;align-items:center;gap:8px;padding:11px 22px;background:#7C3AED;color:#fff;font-weight:700;font-size:14px;border-radius:8px;text-decoration:none">Solicitar acceso →</a>
+            </div>
+            <!-- MOCKUP FormForge -->
+            <div id="formforge" style="background:#F5F3FF;display:flex;align-items:center;justify-content:center;padding:24px">
+              <div style="width:100%;max-width:340px;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);overflow:hidden;font-family:sans-serif">
+                <div style="background:#2D1A40;padding:10px 14px;display:flex;align-items:center">
+                  <span style="font-weight:800;font-size:13px;color:#fff">Form<span style="color:#A78BFA">Forge</span></span>
+                  <span style="font-size:10px;color:rgba(255,255,255,.4);margin-left:auto">v2.3</span>
+                </div>
+                <div style="padding:10px 14px">
+                  <div style="font-size:10px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Plantillas de sistema</div>
+                  <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:10px">
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#F5F3FF;border-radius:5px;cursor:pointer">
+                      <span style="font-size:12px">📋</span>
+                      <span style="font-size:11px;font-weight:500;color:#6D28D9">Auditoría de calidad</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#F8F9FA;border-radius:5px">
+                      <span style="font-size:12px">🔍</span>
+                      <span style="font-size:11px;color:#666">Inspección de obra</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:#F8F9FA;border-radius:5px">
+                      <span style="font-size:12px">📦</span>
+                      <span style="font-size:11px;color:#666">Recepción de mercancía</span>
+                    </div>
+                  </div>
+                  <div style="background:#F5F3FF;border-radius:6px;padding:8px;margin-bottom:6px">
+                    <div style="font-size:10px;font-weight:600;color:#6D28D9;margin-bottom:4px">Campo: Evidencia fotográfica</div>
+                    <div style="border:1.5px dashed #A78BFA;border-radius:4px;padding:8px;text-align:center;color:#A78BFA;font-size:10px">📷 Tomar foto / Subir archivo</div>
+                  </div>
+                  <div style="background:#2D1A40;border-radius:6px;padding:7px;text-align:center;font-size:11px;font-weight:700;color:#A78BFA">Descargar formulario HTML</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /carousel-inner -->
+      </div><!-- /carousel-track -->
+
+      <!-- NAV ARROWS -->
+      <button id="car-prev" onclick="carNav(-1)" style="position:absolute;left:-18px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--navy);transition:box-shadow .15s;z-index:10" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.3)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.2)'">‹</button>
+      <button id="car-next" onclick="carNav(1)" style="position:absolute;right:-18px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--navy);transition:box-shadow .15s;z-index:10" onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,.3)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,.2)'">›</button>
+    </div>
+
+    <!-- DOTS -->
+    <div id="car-dots" style="display:flex;justify-content:center;gap:8px;margin-top:20px"></div>
+
+    <!-- PRODUCT TABS (acceso rápido) -->
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap">
+      <button onclick="carGo(0)" class="car-tab" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:12px;cursor:pointer">CostoPro</button>
+      <button onclick="carGo(1)" class="car-tab" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:12px;cursor:pointer">ConvertorPro</button>
+      <button onclick="carGo(2)" class="car-tab" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:12px;cursor:pointer">VendePro</button>
+      <button onclick="carGo(3)" class="car-tab" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:12px;cursor:pointer">QualityPro</button>
+      <button onclick="carGo(4)" class="car-tab" style="padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:12px;cursor:pointer">FormForge</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════
+     SECCIÓN: CONTACTO
+════════════════════════════════════════════════════ -->
+<section style="background:var(--bg);padding:48px 0">
+  <div style="max-width:800px;margin:0 auto;padding:0 24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden">
+
+      <div style="background:var(--navy);padding:28px 32px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:20px">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:6px">Contacto directo</div>
+          <h2 style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px">¿Tienes preguntas sobre alguna herramienta?</h2>
+          <p style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.5">Respondo en menos de 24 horas. Demos disponibles sin compromiso.</p>
+        </div>
+        <div style="text-align:right">
+          <!-- REEMPLAZA CON TU NOMBRE -->
+          <div style="font-size:18px;font-weight:800;color:#fff">Tu Nombre Aquí</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:2px">Consultor · Desarrollador PyMEs</div>
+        </div>
+      </div>
+
+      <div style="padding:28px 32px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+        <a href="mailto:tuemail@dominio.com" style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:var(--r);text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="width:42px;height:42px;background:var(--blue-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">✉️</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px">Correo</div>
+            <!-- REEMPLAZA -->
+            <div style="font-size:13px;font-weight:600;color:var(--blue)">tuemail@dominio.com</div>
+          </div>
+        </a>
+
+        <a href="https://wa.me/527771234567?text=Hola, me interesa conocer más sobre tus herramientas" target="_blank" style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:var(--r);text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='#25D366'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="width:42px;height:42px;background:#DCFCE7;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">💬</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px">WhatsApp</div>
+            <!-- REEMPLAZA con tu número en formato +52 777 123 4567 -->
+            <div style="font-size:13px;font-weight:600;color:#16A34A">+52 777 123 4567</div>
+          </div>
+        </a>
+
+        <a href="tel:+527771234567" style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:var(--r);text-decoration:none;color:var(--text);transition:border-color .15s" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="width:42px;height:42px;background:var(--amber-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📞</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px">Teléfono</div>
+            <!-- REEMPLAZA -->
+            <div style="font-size:13px;font-weight:600;color:var(--navy)">+52 777 123 4567</div>
+          </div>
+        </a>
+
+        <div style="display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:var(--r)">
+          <div style="width:42px;height:42px;background:#F0F2F5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🕐</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px">Horario de atención</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Lun–Vie  9:00–18:00 CST</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="padding:0 32px 24px;text-align:center">
+        <p style="font-size:12px;color:var(--text3)">Demostraciones sin costo · Adaptamos las herramientas a las necesidades de tu empresa · Soporte incluido</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>CostoPro México — Herramienta gratuita de costeo para PyMEs</p>
+  <p style="margin-top:4px;font-size:11px">© 2025 · Todos los derechos reservados</p>
+</footer>
+
+<!-- ═══ MODAL: CAPTURA ═══ -->
+<div class="overlay" id="overlay-captura" onclick="closeOverlay(event,'captura')">
+  <div class="modal capture-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Tu reporte está listo</span>
+      <button class="btn btn-outline btn-sm" onclick="closeModal('captura')">✕</button>
+    </div>
+    <div class="modal-body" id="captura-body">
+      <!-- Estado 1: Formulario -->
+      <div id="captura-form-state">
+        <div class="capture-icon">📊</div>
+        <div class="capture-title">Recibe tu reporte gratis</div>
+        <div class="capture-sub">Te enviamos el desglose completo de tu costeo en PDF directamente a tu correo. Sin spam, sin suscripción.</div>
+
+        <div class="capture-preview" id="capture-preview-data">
+          <div class="capture-preview-row"><span>Precio al cliente</span><strong id="prev-precio">$0.00</strong></div>
+          <div class="capture-preview-row"><span>Neto que recibes</span><strong id="prev-neto">$0.00</strong></div>
+          <div class="capture-preview-row"><span>Margen real</span><strong id="prev-margen">0.0%</strong></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nombre completo *</label>
+          <input class="form-input" type="text" id="cap-nombre" placeholder="Tu nombre">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo corporativo *</label>
+          <input class="form-input" type="email" id="cap-correo" placeholder="nombre@empresa.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Empresa (opcional)</label>
+          <input class="form-input" type="text" id="cap-empresa" placeholder="Nombre de tu empresa">
+        </div>
+
+        <button class="btn btn-amber btn-lg" style="width:100%;justify-content:center" id="btn-enviar" onclick="enviarReporte()">
+          Enviar mi reporte gratis
+        </button>
+        <div class="form-note">Al continuar aceptas recibir tu reporte y ocasionalmente información sobre herramientas profesionales similares. Sin spam.</div>
+      </div>
+
+      <!-- Estado 2: Enviando -->
+      <div id="captura-sending-state" style="display:none;text-align:center;padding:30px 0">
+        <div class="spinner" style="margin:0 auto 16px"></div>
+        <p style="color:var(--text2)">Preparando y enviando tu reporte...</p>
+      </div>
+
+      <!-- Estado 3: Éxito -->
+      <div id="captura-success-state" style="display:none" class="success-state">
+        <div class="success-icon">✅</div>
+        <div class="success-title">¡Reporte enviado!</div>
+        <div class="success-sub">Revisa tu bandeja de entrada en <strong id="correo-enviado"></strong>.<br><br>Si no lo ves en 2 minutos, revisa tu carpeta de spam.</div>
+        <div style="margin-top:20px">
+          <button class="btn btn-amber" style="width:100%;justify-content:center" onclick="closeModal('captura')">Continuar costeando</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: AGREGAR CONCEPTO ═══ -->
+<div class="overlay" id="overlay-concepto" onclick="closeOverlay(event,'concepto')">
+  <div class="modal concepto-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Agregar concepto</span>
+      <button class="btn btn-outline btn-sm" onclick="closeModal('concepto')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="form-label">Nombre del concepto</label><input class="form-input" type="text" id="nc-nombre" placeholder="Flete, seguro, IEPS, maniobras..."></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="form-label">Tipo</label><select class="input-select" id="nc-tipo" style="width:100%" onchange="toggleNcBase()"><option value="pct">Porcentaje (%)</option><option value="imp">Importe fijo ($)</option></select></div>
+          <div><label class="form-label">Valor</label><input class="input-num" style="width:100%" type="number" id="nc-valor" value="0" min="0" step="0.01"></div>
+        </div>
+        <div id="nc-base-wrap"><label class="form-label">Calcular % sobre</label><select class="input-select" id="nc-base" style="width:100%"><option value="costo_base">Costo base</option><option value="costo_total">Costo total (con gastos)</option><option value="sin_comisiones">Precio antes de comisiones</option><option value="sin_iva" selected>Precio sin IVA</option></select></div>
+        <div><label class="form-label">Posición</label><select class="input-select" id="nc-pos" style="width:100%"><option value="antes">Suma al precio (antes de IVA)</option><option value="ret">Deducción / retención (resta del neto)</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('concepto')">Cancelar</button>
+      <button class="btn btn-amber" onclick="confirmarConcepto()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════
+const S = { ivaMode:'16', tipo:'servicio', persona:'fisica', conceptos:[], nextId:1 };
+
+// ══════════════════════════════════════════════
+// FORMATO
+// ══════════════════════════════════════════════
+const fmt = n => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:2,maximumFractionDigits:2}).format(isFinite(n)?n:0);
+const fmtP = n => (isFinite(n)?n:0).toFixed(1)+'%';
+
+// ══════════════════════════════════════════════
+// CÁLCULO
+// ══════════════════════════════════════════════
+function calcular() {
+  const cb = parseFloat(g('costoBase').value)||0;
+  const giOn=g('gi-on').checked, giP=parseFloat(g('gi-val').value)||0;
+  const gi = giOn ? cb*giP/100 : 0;
+  const ct = cb+gi;
+  const utOn=g('ut-on').checked, utP=parseFloat(g('ut-val').value)||0;
+  const ut = utOn ? ct*utP/100 : 0;
+  let psc = ct+ut;
+
+  let cAntes=[], cAntesT=0;
+  S.conceptos.filter(c=>c.activo&&c.pos==='antes').forEach(c=>{
+    let m = c.tipo==='imp' ? c.valor : ({costo_base:cb,costo_total:ct,sin_comisiones:psc,sin_iva:psc}[c.base]||psc)*c.valor/100;
+    cAntes.push({...c,m}); cAntesT+=m;
+  });
+  let pbc=psc+cAntesT;
+
+  const cvOn=g('cv-on').checked, cvP=parseFloat(g('cv-val').value)||0;
+  const cv=cvOn?pbc*cvP/100:0;
+  const cpOn=g('cp-on').checked, cpP=parseFloat(g('cp-val').value)||0;
+  const cp=cpOn?pbc*cpP/100:0;
+  const psi=pbc+cv+cp;
+
+  const ivP=S.ivaMode==='16'?16:0;
+  const iva=psi*ivP/100;
+  const pCli=psi+iva;
+
+  const rivOn=g('riv-on').checked, riv=rivOn&&iva>0?iva*(2/3):0;
+  const risrOn=g('risr-on').checked, risrP=parseFloat(g('risr-val').value)||0, risr=risrOn?psi*risrP/100:0;
+  const rpOn=g('rp-on').checked, rpP=parseFloat(g('rp-val').value)||0, rp=rpOn?psi*rpP/100:0;
+
+  let cRet=[],cRetT=0;
+  S.conceptos.filter(c=>c.activo&&c.pos==='ret').forEach(c=>{
+    let m=c.tipo==='imp'?c.valor:psi*c.valor/100;
+    cRet.push({...c,m}); cRetT+=m;
+  });
+
+  const neto=pCli-riv-risr-rp-cRetT;
+  const costoReal=cb+gi+cv+cp+cAntesT+cRetT;
+  const uReal=neto-costoReal;
+  const margen=pCli>0?uReal/pCli*100:0;
+  const roi=ct>0?uReal/ct*100:0;
+
+  return {cb,gi,giOn,giP,ct,ut,utOn,utP,cv,cvOn,cvP,cp,cpOn,cpP,
+    cpNombre:g('cp-nombre').value||'Plataforma',
+    cAntes,cAntesT,psi,ivP,iva,pCli,
+    rivOn,riv,risrOn,risr,risrP,rpOn,rp,rpP,
+    rpNombre:g('rp-nombre').value||'Ret.',
+    cRet,cRetT,neto,uReal,margen,roi,costoReal,
+    puntoEquilibrio:costoReal};
+}
+
+function g(id){ return document.getElementById(id); }
+function s(id,val){ const el=g(id); if(el&&el.textContent!==val){el.textContent=val;el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');} }
+function show(id,vis){ const el=g(id); if(el) el.style.display=vis?'':'none'; }
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+function render() {
+  const r = calcular();
+  const nombre = g('nombre').value||'Concepto';
+  const unidad = g('unidad').value;
+  g('bk-producto-sub').textContent = nombre+(unidad?' — '+unidad:'');
+
+  s('gi-monto',fmt(r.gi)); s('ut-monto',fmt(r.ut));
+  s('cv-monto',fmt(r.cv)); s('cp-monto',fmt(r.cp));
+  s('riv-monto',fmt(r.riv)); s('risr-monto',fmt(r.risr)); s('rp-monto',fmt(r.rp));
+
+  s('bk-cb',fmt(r.cb)); s('bk-gi',fmt(r.gi)); g('bk-gi-p').textContent=r.giP.toFixed(1);
+  show('bkr-gi',r.giOn&&r.gi>0);
+  s('bk-ctotal',fmt(r.ct));
+  s('bk-ut',fmt(r.ut)); g('bk-ut-p').textContent=r.utP.toFixed(1); show('bkr-ut',r.utOn&&r.ut>0);
+  s('bk-cv',fmt(r.cv)); g('bk-cv-p').textContent=r.cvP.toFixed(1); show('bkr-cv',r.cvOn&&r.cv>0);
+  s('bk-cp',fmt(r.cp)); g('bk-cp-p').textContent=r.cpP.toFixed(1);
+  g('bk-cp-n').textContent=r.cpNombre; show('bkr-cp',r.cpOn&&r.cp>0);
+
+  g('bk-custom-rows').innerHTML=r.cAntes.map(c=>
+    `<div class="bk-row"><span class="bk-label">+ ${c.nombre}${c.tipo==='pct'?' ('+c.valor+'%)':''}</span><span class="bk-value">${fmt(c.m)}</span></div>`
+  ).join('');
+
+  s('bk-sin-iva',fmt(r.psi));
+  g('bk-iva-p').textContent=r.ivP; s('bk-iva',fmt(r.iva));
+  show('bkr-iva',r.ivP>0);
+  s('bk-precio-cliente',fmt(r.pCli));
+
+  const hasRet=r.rivOn||r.risrOn||r.rpOn||r.cRet.length>0;
+  show('bkr-ret-section',hasRet);
+  show('bkr-riv',r.rivOn&&r.riv>0); s('bk-riv',fmt(r.riv));
+  show('bkr-risr',r.risrOn&&r.risr>0); g('bk-risr-p').textContent=r.risrP.toFixed(1); s('bk-risr',fmt(r.risr));
+  show('bkr-rp',r.rpOn&&r.rp>0); g('bk-rp-n').textContent=r.rpNombre; g('bk-rp-p').textContent=r.rpP.toFixed(1); s('bk-rp',fmt(r.rp));
+
+  s('bk-neto',fmt(r.neto));
+
+  const mEl=g('met-margen');
+  mEl.textContent=fmtP(r.margen);
+  mEl.className='metric-val '+(r.margen>=20?'green':r.margen>=10?'amber':'red');
+  s('met-util',fmt(r.uReal));
+  g('met-roi').textContent=fmtP(r.roi);
+  s('met-pe',fmt(r.puntoEquilibrio));
+
+  // ¿Costeo completo? Activar CTA
+  const listo = (parseFloat(g('costoBase').value)||0) > 0 && g('nombre').value.trim().length > 0;
+  const btn = g('btn-reporte');
+  btn.classList.toggle('pulse', listo);
+  g('reporte-hint').textContent = listo ? 'Completa tu correo y recíbelo gratis' : 'Llena el nombre y costo base para activar';
+  btn.disabled = !listo;
+  btn.style.opacity = listo ? '1' : '.6';
+
+  // Análisis de descuentos
+  renderDescuentos(r);
+  // Recalcular niveles guardados
+  if (nivelesDescuento.length) renderNivelesDescuento();
+  // Recalcular descuento libre si hay valor
+  if (document.getElementById('ds-libre-pct').value) calcularDescuentoLibre();
+}
+
+// ══════════════════════════════════════════════
+// ANÁLISIS DE DESCUENTOS
+// ══════════════════════════════════════════════
+function renderDescuentos(r) {
+  if (!r.pCli || r.pCli <= 0) return;
+
+  // Resumen superior
+  s('ds-costo-total', fmt(r.ct));
+  s('ds-utilidad-base', fmt(r.uReal));
+  g('ds-utilidad-pct').textContent = fmtP(r.margen) + ' sobre precio';
+
+  // Calcular descuento máximo (donde utilidad = 0)
+  // precio_con_descuento * (1-ret%) - costoReal = 0
+  // pCli * (1 - dMax/100) = costoReal (aproximación sobre precio con IVA)
+  const dMax = r.pCli > 0 ? Math.max(0, (1 - r.costoReal / r.pCli) * 100) : 0;
+
+  // Alerta
+  const alerta = g('ds-alerta');
+  const ico = g('ds-alerta-ico');
+  const titulo = g('ds-alerta-titulo');
+  const sub = g('ds-alerta-sub');
+
+  if (dMax >= 20) {
+    alerta.style.cssText = 'margin:0 14px 10px;padding:8px 12px;border-radius:7px;background:var(--green-bg);border:1px solid #A7F3D0;display:flex;align-items:center;gap:8px';
+    ico.textContent = '✅';
+    titulo.style.color = 'var(--green)';
+    titulo.textContent = `Descuento máximo: ${dMax.toFixed(1)}% sin perder utilidad`;
+    sub.style.color = 'var(--green)';
+    sub.textContent = 'Tu margen permite descuentos comerciales importantes.';
+  } else if (dMax >= 10) {
+    alerta.style.cssText = 'margin:0 14px 10px;padding:8px 12px;border-radius:7px;background:var(--amber-bg);border:1px solid #FCD34D;display:flex;align-items:center;gap:8px';
+    ico.textContent = '⚠️';
+    titulo.style.color = '#92400E';
+    titulo.textContent = `Descuento máximo: ${dMax.toFixed(1)}% — margen ajustado`;
+    sub.style.color = '#92400E';
+    sub.textContent = 'Descuentos posibles pero limitados. Revisa la tabla.';
+  } else {
+    alerta.style.cssText = 'margin:0 14px 10px;padding:8px 12px;border-radius:7px;background:var(--red-bg);border:1px solid #FECACA;display:flex;align-items:center;gap:8px';
+    ico.textContent = '🚫';
+    titulo.style.color = 'var(--red)';
+    titulo.textContent = `Descuento máximo: ${dMax.toFixed(1)}% — margen muy estrecho`;
+    sub.style.color = 'var(--red)';
+    sub.textContent = 'Cualquier descuento compromete seriamente la ganancia.';
+  }
+
+  // Tabla de escenarios: 5%, 10%, 15%, 20%, 25%, 30%
+  const niveles = [5, 10, 15, 20, 25, 30];
+  const tbody = g('ds-tabla-body');
+  tbody.innerHTML = niveles.map(pct => {
+    const precioDesc = r.pCli * (1 - pct / 100);
+    // Recalcular retenciones sobre el nuevo precio sin IVA
+    const psiDesc = r.ivP > 0 ? precioDesc / (1 + r.ivP/100) : precioDesc;
+    const rivDesc = r.rivOn ? psiDesc * (2/3) * (r.ivP/100) : 0;
+    const risrDesc = r.risrOn ? psiDesc * r.risrP/100 : 0;
+    const rpDesc = r.rpOn ? psiDesc * r.rpP/100 : 0;
+    const netoDesc = precioDesc - rivDesc - risrDesc - rpDesc - r.cRetT;
+    const utilDesc = netoDesc - r.costoReal;
+    const ok = utilDesc > 0;
+    const limite = pct <= dMax;
+
+    let rowBg = '';
+    let badge = '';
+    let utilColor = '';
+
+    if (pct > dMax) {
+      rowBg = 'background:#FEF2F2';
+      badge = `<span style="background:#FEE2E2;color:var(--red);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px">PÉRDIDA</span>`;
+      utilColor = 'color:var(--red)';
+    } else if (pct >= dMax * 0.85) {
+      rowBg = 'background:#FFFBEB';
+      badge = `<span style="background:#FEF3DC;color:#92400E;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px">LÍMITE</span>`;
+      utilColor = 'color:#92400E';
+    } else {
+      badge = `<span style="background:var(--green-bg);color:var(--green);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px">OK</span>`;
+      utilColor = 'color:var(--green)';
+    }
+
+    return `<tr style="${rowBg}">
+      <td style="padding:5px 6px;font-weight:600">${pct}%</td>
+      <td style="padding:5px 6px;text-align:right;font-variant-numeric:tabular-nums">${fmt(precioDesc)}</td>
+      <td style="padding:5px 6px;text-align:right;font-variant-numeric:tabular-nums;${utilColor}">${fmt(utilDesc)}</td>
+      <td style="padding:5px 6px;text-align:center">${badge}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// MODO / PERSONA
+// ══════════════════════════════════════════════
+const MODOS = {
+  servicio_fisica:{ title:'Servicio · Persona Física', desc:'Retención IVA (10.67%) e ISR (10%) aplicadas automáticamente.', lCosto:'Costo del servicio', lSub:'Tiempo, herramientas, subcontrataciones...', lGI:'Gastos de operación', retIVA:true, retISR:true },
+  servicio_moral:{ title:'Servicio · Persona Moral', desc:'Sin retenciones automáticas. Empresa paga ISR corporativo.', lCosto:'Costo del servicio', lSub:'Tiempo, herramientas, subcontrataciones...', lGI:'Gastos de operación', retIVA:false, retISR:false },
+  producto_fisica:{ title:'Producto · Persona Física', desc:'Venta de producto físico como persona física.', lCosto:'Costo de producción / adquisición', lSub:'Materia prima, manufactura, compra...', lGI:'Gastos indirectos', retIVA:false, retISR:false },
+  producto_moral:{ title:'Producto · Persona Moral', desc:'Venta de producto. Sin retenciones automáticas.', lCosto:'Costo de producción / adquisición', lSub:'Materia prima, manufactura, compra...', lGI:'Gastos indirectos', retIVA:false, retISR:false }
+};
+
+function setTipo(t){ S.tipo=t; g('modo-producto').classList.toggle('active',t==='producto'); g('modo-servicio').classList.toggle('active',t==='servicio'); applyModo(); }
+function setPersona(p){ S.persona=p; g('modo-moral').classList.toggle('active',p==='moral'); g('modo-fisica').classList.toggle('active',p==='fisica'); applyModo(); }
+
+function applyModo(){
+  const cfg=MODOS[(S.tipo||'servicio')+'_'+(S.persona||'fisica')]||MODOS.servicio_fisica;
+  g('regime-title').textContent=cfg.title;
+  g('regime-desc').textContent=cfg.desc;
+  if(g('label-costo')) g('label-costo').textContent=cfg.lCosto;
+  if(g('label-costo-sub')) g('label-costo-sub').textContent=cfg.lSub;
+  if(g('lbl-gi')) g('lbl-gi').textContent=cfg.lGI;
+  g('riv-on').checked=cfg.retIVA;
+  g('risr-on').checked=cfg.retISR;
+  render();
+}
+
+// ══════════════════════════════════════════════
+// TOGGLES / IVA
+// ══════════════════════════════════════════════
+function toggleRow(key){
+  const on=g(key+'-on').checked;
+  const row=g('row-'+key);
+  if(row){ row.classList.toggle('disabled',!on); row.querySelectorAll('input[type=number],input[type=text]:not([type=checkbox])').forEach(el=>{ if(el.id!==key+'-on') el.disabled=!on; }); }
+  render();
+}
+
+function setIVA(m){
+  S.ivaMode=m;
+  ['16','0','ex'].forEach(x=>g('iva-'+x).classList.toggle('active',m===x));
+  if(m!=='16'){ g('riv-on').checked=false; }
+  render();
+}
+
+// ══════════════════════════════════════════════
+// CONCEPTOS PERSONALIZADOS
+// ══════════════════════════════════════════════
+function openConceptoModal(){
+  g('nc-nombre').value=''; g('nc-tipo').value='pct'; g('nc-valor').value='0';
+  g('nc-base').value='sin_iva'; g('nc-pos').value='antes';
+  g('nc-base-wrap').style.display='';
+  openModal('concepto');
+}
+function toggleNcBase(){ g('nc-base-wrap').style.display=g('nc-tipo').value==='pct'?'':'none'; }
+function confirmarConcepto(){
+  const nombre=g('nc-nombre').value.trim();
+  if(!nombre){ g('nc-nombre').focus(); return; }
+  S.conceptos.push({ id:S.nextId++, nombre, tipo:g('nc-tipo').value, valor:parseFloat(g('nc-valor').value)||0, base:g('nc-base').value, pos:g('nc-pos').value, activo:true });
+  closeModal('concepto');
+  renderConceptosList();
+  render();
+}
+function renderConceptosList(){
+  const list=g('custom-list');
+  list.querySelectorAll('.custom-item').forEach(el=>el.remove());
+  g('empty-custom').style.display=S.conceptos.length?'none':'';
+  S.conceptos.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='custom-item'; div.id='ci-'+c.id;
+    div.innerHTML=`
+      <label class="toggle"><input type="checkbox" ${c.activo?'checked':''} onchange="toggleConcepto(${c.id},this.checked)"><span class="toggle-track"></span><span class="toggle-thumb"></span></label>
+      <span style="font-size:13px;font-weight:500">${c.nombre} <small style="font-weight:400;color:var(--text3)">${c.tipo==='pct'?c.valor+'%':'$'+c.valor}</small></span>
+      <span class="bk-tag ${c.pos==='antes'?'costo':'ret'}">${c.pos==='antes'?'+precio':'retención'}</span>
+      <input class="input-num" type="number" value="${c.valor}" style="width:76px" onchange="updateConcepto(${c.id},this.value)">
+      <span class="unit-label">${c.tipo==='pct'?'%':'$'}</span>
+      <button class="btn btn-danger btn-sm" onclick="eliminarConcepto(${c.id})">✕</button>`;
+    list.insertBefore(div, g('empty-custom'));
+  });
+}
+function toggleConcepto(id,v){ const c=S.conceptos.find(x=>x.id===id); if(c){c.activo=v;render();} }
+function updateConcepto(id,v){ const c=S.conceptos.find(x=>x.id===id); if(c){c.valor=parseFloat(v)||0;render();} }
+function eliminarConcepto(id){ S.conceptos=S.conceptos.filter(x=>x.id!==id); const el=g('ci-'+id); if(el)el.remove(); if(!S.conceptos.length)g('empty-custom').style.display=''; render(); }
+
+// ══════════════════════════════════════════════
+// CAPTURA Y ENVÍO DE REPORTE
+// ══════════════════════════════════════════════
+function abrirCaptura(){
+  const r=calcular();
+  g('prev-precio').textContent=fmt(r.pCli);
+  g('prev-neto').textContent=fmt(r.neto);
+  g('prev-margen').textContent=fmtP(r.margen);
+  // Reset estados
+  g('captura-form-state').style.display='';
+  g('captura-sending-state').style.display='none';
+  g('captura-success-state').style.display='none';
+  openModal('captura');
+}
+
+function buildReporteTexto(r) {
+  const nombre = g('nombre').value||'Concepto';
+  const unidad = g('unidad').value;
+  const key=(S.tipo||'servicio')+'_'+(S.persona||'fisica');
+  const cfg=MODOS[key]||MODOS.servicio_fisica;
+  const fecha=new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+
+  const lin = (label,val) => `${label.padEnd(35,'.')} ${val}`;
+
+  let txt = `REPORTE DE COSTEO — CostoPro México\n`;
+  txt += `${'═'.repeat(48)}\n`;
+  txt += `Producto/Servicio: ${nombre}${unidad?' ('+unidad+')':''}\n`;
+  txt += `Régimen: ${cfg.title}\n`;
+  txt += `Fecha: ${fecha}\n\n`;
+  txt += `ESTRUCTURA DE COSTOS\n${'─'.repeat(48)}\n`;
+  txt += lin('Costo base (directo)',fmt(r.cb))+'\n';
+  if(r.giOn) txt += lin(`+ Gastos indirectos (${r.giP.toFixed(1)}%)`,fmt(r.gi))+'\n';
+  txt += lin('= Costo total',fmt(r.ct))+'\n\n';
+  txt += `PRECIO DE VENTA\n${'─'.repeat(48)}\n`;
+  if(r.utOn) txt += lin(`+ Utilidad (${r.utP.toFixed(1)}%)`,fmt(r.ut))+'\n';
+  if(r.cvOn) txt += lin(`+ Comisión vendedor (${r.cvP.toFixed(1)}%)`,fmt(r.cv))+'\n';
+  if(r.cpOn) txt += lin(`+ ${r.cpNombre} (${r.cpP.toFixed(1)}%)`,fmt(r.cp))+'\n';
+  r.cAntes.forEach(c=>{ txt+=lin(`+ ${c.nombre}`,fmt(c.m))+'\n'; });
+  txt += lin('= Precio sin IVA',fmt(r.psi))+'\n';
+  if(r.ivP>0) txt += lin(`+ IVA (${r.ivP}%)`,fmt(r.iva))+'\n';
+  txt += `\n${'═'.repeat(48)}\n`;
+  txt += lin('PRECIO AL CLIENTE',fmt(r.pCli))+'\n';
+  txt += `${'═'.repeat(48)}\n\n`;
+  if(r.rivOn||r.risrOn||r.rpOn) {
+    txt+=`RETENCIONES DEL CLIENTE\n${'─'.repeat(48)}\n`;
+    if(r.rivOn) txt+=lin('— Retención IVA (10.67%)',fmt(r.riv))+'\n';
+    if(r.risrOn) txt+=lin(`— Retención ISR (${r.risrP.toFixed(1)}%)`,fmt(r.risr))+'\n';
+    if(r.rpOn) txt+=lin(`— ${r.rpNombre} (${r.rpP.toFixed(1)}%)`,fmt(r.rp))+'\n';
+    txt+='\n';
+  }
+  txt += `${'═'.repeat(48)}\n`;
+  txt += lin('NETO QUE RECIBES',fmt(r.neto))+'\n';
+  txt += `${'═'.repeat(48)}\n\n`;
+  txt += `MÉTRICAS CLAVE\n${'─'.repeat(48)}\n`;
+  txt += lin('Margen sobre venta',fmtP(r.margen))+'\n';
+  txt += lin('Utilidad real ($)',fmt(r.uReal))+'\n';
+  txt += lin('ROI sobre costo',fmtP(r.roi))+'\n';
+  txt += lin('Precio mínimo viable',fmt(r.puntoEquilibrio))+'\n\n';
+  txt += `Generado con CostoPro México — costopro.mx\n`;
+
+  // Análisis de descuentos
+  const dMax = r.pCli > 0 ? Math.max(0,(1 - r.costoReal/r.pCli)*100) : 0;
+  txt += `\nANÁLISIS DE DESCUENTOS MÁXIMOS\n${'─'.repeat(48)}\n`;
+  txt += lin('Costo total (piso de precio)',fmt(r.ct))+'\n';
+  txt += lin('Descuento máximo sin pérdida',dMax.toFixed(1)+'%')+'\n';
+  txt += '\n';
+  [5,10,15,20,25,30].forEach(pct=>{
+    const pd=r.pCli*(1-pct/100);
+    const psiD=r.ivP>0?pd/(1+r.ivP/100):pd;
+    const ud=pd-(r.rivOn?psiD*(2/3)*(r.ivP/100):0)-(r.risrOn?psiD*r.risrP/100:0)-(r.rpOn?psiD*r.rpP/100:0)-r.cRetT-r.costoReal;
+    const estado=ud>0?'VIABLE':'PÉRDIDA';
+    txt+=lin(`Descuento ${pct}% → Precio ${fmt(pd)}`,`Utilidad: ${fmt(ud)} [${estado}]`)+'\n';
+  });
+  return txt;
+}
+
+async function enviarReporte(){
+  const nombre=g('cap-nombre').value.trim();
+  const correo=g('cap-correo').value.trim();
+  const empresa=g('cap-empresa').value.trim();
+
+  if(!nombre){ g('cap-nombre').focus(); return; }
+  if(!correo||!correo.includes('@')){ g('cap-correo').focus(); return; }
+
+  // Cambiar a estado enviando
+  g('captura-form-state').style.display='none';
+  g('captura-sending-state').style.display='';
+
+  const r=calcular();
+  const productoNombre=g('nombre').value||'Concepto';
+  const key=(S.tipo||'servicio')+'_'+(S.persona||'fisica');
+  const cfg=MODOS[key]||MODOS.servicio_fisica;
+
+  const params = {
+    to_name: nombre,
+    to_email: correo,
+    empresa: empresa||'—',
+    product_name: productoNombre,
+    regime: cfg.title,
+    precio_cliente: fmt(r.pCli),
+    neto: fmt(r.neto),
+    margen: fmtP(r.margen),
+    utilidad: fmt(r.uReal),
+    report_body: buildReporteTexto(r)
+  };
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    g('correo-enviado').textContent=correo;
+    g('captura-sending-state').style.display='none';
+    g('captura-success-state').style.display='';
+  } catch(err) {
+    g('captura-sending-state').style.display='none';
+    g('captura-form-state').style.display='';
+    alert('Error al enviar el reporte. Por favor intenta de nuevo o verifica la configuración de EmailJS.');
+    console.error(err);
+  }
+}
+
+// ══════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════
+function openModal(key){ g('overlay-'+key).classList.add('open'); }
+function closeModal(key){ g('overlay-'+key).classList.remove('open'); }
+function closeOverlay(e,key){ if(e.target===g('overlay-'+key)) closeModal(key); }
+
+// ══════════════════════════════════════════════
+// DESCUENTO LIBRE (calculadora interactiva)
+// ══════════════════════════════════════════════
+let nivelesDescuento = []; // niveles guardados por el usuario
+
+function calcularDescuentoLibre() {
+  const pct = parseFloat(document.getElementById('ds-libre-pct').value);
+  const res = document.getElementById('ds-libre-resultado');
+  if (isNaN(pct) || pct < 0) { res.style.display='none'; return; }
+
+  const r = calcular();
+  if (!r.pCli || r.pCli <= 0) { res.style.display='none'; return; }
+
+  const precioDesc = r.pCli * (1 - pct / 100);
+  const psiDesc = r.ivP > 0 ? precioDesc / (1 + r.ivP/100) : precioDesc;
+  const rivDesc = r.rivOn ? psiDesc*(2/3)*(r.ivP/100) : 0;
+  const risrDesc = r.risrOn ? psiDesc*r.risrP/100 : 0;
+  const rpDesc = r.rpOn ? psiDesc*r.rpP/100 : 0;
+  const netoDesc = precioDesc - rivDesc - risrDesc - rpDesc - r.cRetT;
+  const utilDesc = netoDesc - r.costoReal;
+  const margenDesc = precioDesc > 0 ? utilDesc / precioDesc * 100 : 0;
+
+  document.getElementById('dsl-precio').textContent = fmt(precioDesc);
+  document.getElementById('dsl-util').textContent = fmt(utilDesc);
+  document.getElementById('dsl-util').style.color = utilDesc >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('dsl-margen').textContent = fmtP(margenDesc);
+  document.getElementById('dsl-margen').style.color = margenDesc >= 15 ? 'var(--green)' : margenDesc >= 5 ? '#92400E' : 'var(--red)';
+
+  const badge = document.getElementById('dsl-badge');
+  if (utilDesc > 0) {
+    if (margenDesc >= 15) {
+      badge.style.cssText='background:var(--green-bg);color:var(--green)';
+      badge.textContent='✅ Descuento viable — mantiene margen saludable';
+    } else if (margenDesc >= 5) {
+      badge.style.cssText='background:var(--amber-bg);color:#92400E';
+      badge.textContent='⚠️ Viable pero ajustado — margen reducido';
+    } else {
+      badge.style.cssText='background:#FEF3DC;color:#92400E';
+      badge.textContent='⚠️ Margen mínimo — usa con precaución';
+    }
+  } else {
+    badge.style.cssText='background:var(--red-bg);color:var(--red)';
+    badge.textContent='🚫 No viable — precio por debajo del costo total';
+  }
+  res.style.display='';
+}
+
+function agregarNivelDescuento() {
+  const pct = parseFloat(document.getElementById('ds-libre-pct').value);
+  if (isNaN(pct) || pct < 0 || pct > 100) return;
+  if (nivelesDescuento.some(n => Math.abs(n - pct) < 0.01)) return; // evitar duplicados
+  if (nivelesDescuento.length >= 8) { alert('Máximo 8 niveles de descuento.'); return; }
+  nivelesDescuento.push(pct);
+  nivelesDescuento.sort((a,b)=>a-b);
+  renderNivelesDescuento();
+}
+
+function eliminarNivel(pct) {
+  nivelesDescuento = nivelesDescuento.filter(n => Math.abs(n - pct) >= 0.01);
+  renderNivelesDescuento();
+}
+
+function limpiarNiveles() {
+  nivelesDescuento = [];
+  renderNivelesDescuento();
+}
+
+function renderNivelesDescuento() {
+  const wrap = document.getElementById('ds-niveles-wrap');
+  const list = document.getElementById('ds-niveles-list');
+  if (!nivelesDescuento.length) { wrap.style.display='none'; return; }
+  wrap.style.display='';
+  const r = calcular();
+  list.innerHTML = nivelesDescuento.map(pct => {
+    const precioDesc = r.pCli * (1 - pct/100);
+    const psiDesc = r.ivP>0 ? precioDesc/(1+r.ivP/100) : precioDesc;
+    const rivDesc = r.rivOn ? psiDesc*(2/3)*(r.ivP/100) : 0;
+    const risrDesc = r.risrOn ? psiDesc*r.risrP/100 : 0;
+    const netoDesc = precioDesc - rivDesc - risrDesc - r.cRetT;
+    const utilDesc = netoDesc - r.costoReal;
+    const ok = utilDesc > 0;
+    const color = !ok ? 'var(--red)' : utilDesc/precioDesc*100 >= 15 ? 'var(--green)' : '#92400E';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px">
+      <span style="font-weight:700;color:var(--navy);min-width:52px">${pct.toFixed(2)}%</span>
+      <span style="flex:1;font-variant-numeric:tabular-nums;color:var(--text2)">${fmt(precioDesc)}</span>
+      <span style="font-variant-numeric:tabular-nums;font-weight:600;color:${color};min-width:80px;text-align:right">${ok?fmt(utilDesc):'Pérdida'}</span>
+      <span style="font-size:10px;background:${ok?'var(--green-bg)':'var(--red-bg)'};color:${ok?'var(--green)':'var(--red)'};padding:2px 6px;border-radius:10px;font-weight:700">${ok?'OK':'⚠'}</span>
+      <button onclick="eliminarNivel(${pct})" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;padding:0 4px">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// CAROUSEL
+// ══════════════════════════════════════════════
+let carIdx = 0;
+const carTotal = 5;
+
+function carNav(dir) { carGo(carIdx + dir); }
+
+function carGo(idx) {
+  carIdx = ((idx % carTotal) + carTotal) % carTotal;
+  document.getElementById('carousel-inner').style.transform = `translateX(-${carIdx * 100}%)`;
+  renderDots();
+}
+
+function renderDots() {
+  const dots = document.getElementById('car-dots');
+  dots.innerHTML = Array.from({length: carTotal}, (_,i) =>
+    `<button onclick="carGo(${i})" style="width:${i===carIdx?'24px':'8px'};height:8px;border-radius:4px;border:none;background:${i===carIdx?'var(--amber)':'rgba(255,255,255,.3)'};cursor:pointer;transition:all .3s;padding:0"></button>`
+  ).join('');
+}
+
+function scrollToProducto(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const map = { convertorpro:1, vendepro:2, qualitypro:3, formforge:4 };
+  if (map[id] !== undefined) carGo(map[id]);
+}
+
+// Auto-advance carrusel cada 6 segundos
+let carTimer = setInterval(() => carNav(1), 6000);
+document.getElementById('carousel-inner')?.addEventListener('touchstart', () => clearInterval(carTimer));
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  S.tipo='servicio'; S.persona='fisica';
+  applyModo();
+  render();
+  renderDots();
+});
+</script>
+</body>
+</html>
